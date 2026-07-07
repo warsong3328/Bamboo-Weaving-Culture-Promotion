@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>留住乡土记忆 — 新昌竹雕·根雕非遗数字化实践</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+      background-color: #FBF9F7;
+      color: #191919;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: #3A5F4344; color: #191919; }
+
+    /* ===== Typography ===== */
+    h1, h2, h3, h4 {
+      font-family: 'Noto Serif SC', 'Times New Roman', serif;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .section-tag {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #3A5F43;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #3A5F4344;
+      padding-bottom: 0.4rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      color: #191919;
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      font-size: 1rem;
+      color: #666;
+      font-weight: 300;
+      max-width: 540px;
+      line-height: 1.8;
+    }
+
+    /* ===== Layout ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    section {
+      padding: 5rem 0;
+    }
+
+    /* ===== Nav ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(251, 249, 247, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid #EBE6E0;
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav .logo {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #191919;
+      letter-spacing: 0.05em;
+    }
+    nav .logo span { color: #3A5F43; }
+    nav .links { display: flex; gap: 2rem; }
+    nav .links a {
+      font-size: 0.85rem;
+      color: #666;
+      text-decoration: none;
+      transition: color 0.3s;
+      font-weight: 400;
+    }
+    nav .links a:hover { color: #191919; }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 2rem 4rem;
+      position: relative;
+    }
+    .hero-content { max-width: 800px; }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: #191919;
+      line-height: 1.4;
+      margin-bottom: 2rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: #3A5F43;
+    }
+    .hero .sub {
+      font-size: 1.05rem;
+      color: #888;
+      font-weight: 300;
+      margin-bottom: 3rem;
+    }
+    .hero-cards {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-card {
+      background: #F3EFEA;
+      border: 1px solid #EBE6E0;
+      border-radius: 12px;
+      padding: 1.2rem 1.8rem;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.95rem;
+      color: #191919;
+      text-decoration: none;
+      min-width: 140px;
+    }
+    .hero-card:hover {
+      background: #3A5F43;
+      color: #fff;
+      border-color: #3A5F43;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -8px rgba(58,95,67,0.25);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #aaa;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,100%{ transform: translateX(-50%) translateY(0); }
+      50%{ transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ===== Section Base ===== */
+    .section-header {
+      margin-bottom: 3rem;
+    }
+
+    /* ===== Artisan ===== */
+    .artisan-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .artisan-image {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #F3EFEA;
+      aspect-ratio: 4 / 3;
+    }
+    .artisan-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .artisan-image:hover img { transform: scale(1.03); }
+    .artisan-text blockquote {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.3rem;
+      line-height: 1.7;
+      color: #3A5F43;
+      border-left: 3px solid #3A5F43;
+      padding-left: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .artisan-text p {
+      color: #555;
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+
+    /* ===== Museum (Bento Grid) ===== */
+    .museum-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+    }
+    .museum-card {
+      background: #FBF9F7;
+      border: 1px solid #EBE6E0;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.5s ease;
+      cursor: pointer;
+      position: relative;
+      group: true;
+    }
+    .museum-card:hover {
+      background: #F3EFEA;
+      box-shadow: 0 16px 40px -12px rgba(0,0,0,0.1);
+    }
+    .museum-card.featured {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .museum-card.medium {
+      grid-column: span 2;
+    }
+    .museum-card .img-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F3EFEA;
+      transition: background 0.5s;
+    }
+    .museum-card.featured .img-wrap { aspect-ratio: 16 / 10; }
+    .museum-card:hover .img-wrap { background: #EBE6E0; }
+    .museum-card .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      mix-blend-mode: multiply;
+    }
+    .museum-card:hover .img-wrap img { transform: scale(1.04); }
+    .museum-card .meta {
+      padding: 1rem 1.2rem 1.2rem;
+      border-top: 1px solid #EBE6E0;
+    }
+    .museum-card .meta .tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: #3A5F43;
+      font-weight: 500;
+    }
+    .museum-card .meta h3 {
+      font-size: 1rem;
+      margin: 0.3rem 0 0.2rem;
+    }
+    .museum-card .meta p {
+      font-size: 0.82rem;
+      color: #888;
+      font-weight: 300;
+    }
+
+    /* ===== Timeline (Journey) ===== */
+    .timeline {
+      position: relative;
+      padding-left: 2.5rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: #D6CFC7;
+    }
+    .tl-item {
+      position: relative;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+    .tl-item.visible { opacity: 1; transform: translateY(0); }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #FBF9F7;
+      border: 2px solid #3A5F43;
+    }
+    .tl-item:last-child::before {
+      background: #3A5F43;
+    }
+    .tl-date {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: #3A5F43;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+    .tl-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .tl-desc {
+      font-size: 0.9rem;
+      color: #666;
+      font-weight: 300;
+    }
+
+    /* ===== Team Gallery ===== */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .team-card {
+      text-align: center;
+    }
+    .team-card .avatar {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #F3EFEA;
+      margin-bottom: 0.6rem;
+    }
+    .team-card .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .team-card .name {
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .team-card .role {
+      font-size: 0.72rem;
+      color: #999;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      border-top: 1px solid #EBE6E0;
+      padding: 3rem 2rem;
+      margin-top: 2rem;
+    }
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer .org {
+      font-size: 0.85rem;
+      color: #666;
+    }
+    footer .org strong { color: #191919; font-weight: 500; }
+    footer .copyright {
+      font-size: 0.78rem;
+      color: #aaa;
+    }
+
+    /* ===== Scroll Reveal ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== Hamburger Menu ===== */
+    .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: #191919; border-radius: 2px; transition: 0.3s; }
+
+    /* ===== Project Metadata Ticker ===== */
+    .project-metadata {
+      background: #191919; color: #FBF9F7; padding: 1.5rem 0;
+      border-top: 1px solid #333; border-bottom: 1px solid #333;
+    }
+    .metadata-container {
+      max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-around;
+      align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .meta-item { display: flex; flex-direction: column; align-items: center; font-family: 'Inter', sans-serif; }
+    .meta-item span { font-size: 0.65rem; color: #888; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.2rem; }
+    .meta-item strong { font-size: 1.2rem; font-weight: 500; font-family: 'Noto Serif SC', serif; color: #D6CFC7; }
+    .meta-divider { width: 1px; height: 24px; background: #333; }
+
+    /* ===== Archive Modal ===== */
+    .archive-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 999; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+    }
+    .archive-modal.active { opacity: 1; pointer-events: auto; }
+    .modal-backdrop {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(251, 249, 247, 0.8);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .modal-content {
+      position: relative; background: #FBF9F7; width: 90%; max-width: 1000px;
+      border-radius: 16px; border: 1px solid #EBE6E0;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.08);
+      transform: translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+    .archive-modal.active .modal-content { transform: translateY(0); }
+    .close-btn {
+      position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none;
+      font-size: 2rem; color: #191919; cursor: pointer; z-index: 10; line-height: 1;
+      opacity: 0.5; transition: 0.3s;
+    }
+    .close-btn:hover { opacity: 1; transform: rotate(90deg); }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .modal-img-container {
+      background: #F3EFEA; display: flex; align-items: center;
+      justify-content: center; padding: 2rem;
+    }
+    .modal-img-container img {
+      width: 100%; height: auto; max-height: 70vh; object-fit: contain; mix-blend-mode: multiply;
+    }
+    .modal-info {
+      padding: 4rem 3rem; display: flex; flex-direction: column; justify-content: center;
+    }
+    .modal-tag {
+      font-family: 'Inter', sans-serif; font-size: 0.75rem; letter-spacing: 0.15em;
+      color: #3A5F43; border-bottom: 1px solid #3A5F43; padding-bottom: 0.3rem;
+      display: inline-block; margin-bottom: 1rem; align-self: flex-start;
+    }
+    .modal-title { font-size: 2.2rem; margin-bottom: 1.5rem; }
+    .modal-meta-data {
+      margin-bottom: 1.5rem; font-size: 0.85rem; color: #555;
+      background: #F3EFEA; padding: 1rem; border-radius: 8px;
+    }
+    .modal-desc { font-size: 1rem; color: #666; line-height: 1.8; margin-bottom: 2rem; }
+    .play-btn {
+      background: #191919; color: #FBF9F7; border: none; padding: 0.8rem 1.5rem;
+      font-family: 'Noto Serif SC', serif; border-radius: 6px; cursor: pointer;
+      transition: 0.3s; font-size: 0.9rem; align-self: flex-start;
+    }
+    .play-btn:hover { background: #3A5F43; }
+
+    /* ===== Ambient Audio Controller ===== */
+    .ambient-controller {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 90;
+      width: 44px; height: 44px; border-radius: 50%; background: #FBF9F7;
+      border: 1px solid #EBE6E0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      display: flex; align-items: center; justify-content: center; gap: 3px;
+      cursor: pointer; transition: all 0.3s ease;
+    }
+    .ambient-controller:hover { background: #3A5F43; border-color: #3A5F43; }
+    .sound-wave { width: 2px; height: 12px; background: #191919; border-radius: 1px; transition: 0.3s; }
+    .ambient-controller:hover .sound-wave { background: #FBF9F7; }
+    .ambient-controller.playing .sound-wave { background: #3A5F43; animation: sound 1.2s infinite ease-in-out; }
+    .ambient-controller.playing:hover .sound-wave { background: #FBF9F7; }
+    .ambient-controller.playing #wave-1 { animation-delay: 0s; }
+    .ambient-controller.playing #wave-2 { animation-delay: 0.2s; }
+    .ambient-controller.playing #wave-3 { animation-delay: 0.4s; }
+    @keyframes sound {
+      0%, 100% { height: 6px; }
+      50% { height: 16px; }
+    }
+    .ambient-hint {
+      position: fixed; bottom: 3.5rem; right: 6rem; z-index: 90;
+      font-size: 0.7rem; color: #aaa; opacity: 0; transition: opacity 0.3s;
+      pointer-events: none; white-space: nowrap;
+    }
+    .ambient-controller:hover + .ambient-hint { opacity: 1; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 868px) {
+      nav .links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: #FBF9F7; border-bottom: 1px solid #EBE6E0; flex-direction: column; padding: 1rem 2rem; gap: 1rem; }
+      nav .links.open { display: flex; }
+      .hamburger { display: flex; }
+      .artisan-grid { grid-template-columns: 1fr; }
+      .museum-grid { grid-template-columns: repeat(2, 1fr); }
+      .museum-card.featured,
+      .museum-card.medium { grid-column: span 2; }
+      .hero-card { min-width: 120px; padding: 1rem 1.4rem; font-size: 0.85rem; }
+      .meta-divider { display: none; }
+      .meta-item { width: 45%; }
+      .modal-grid { grid-template-columns: 1fr; }
+      .modal-img-container { padding: 1rem; height: 30vh; }
+      .modal-info { padding: 2rem 1.5rem; }
+      .modal-title { font-size: 1.8rem; }
+      .ambient-controller { bottom: 1.5rem; right: 1.5rem; }
+    }
+    @media (max-width: 540px) {
+      .museum-grid { grid-template-columns: 1fr; }
+      .museum-card.featured,
+      .museum-card.medium { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Nav ===== -->
+  <nav>
+    <div class="logo">留住乡土<span>·</span>记忆</div>
+    <button class="hamburger" id="hamburger" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="links" id="navLinks">
+      <a href="#artisan">匠人纪实</a>
+      <a href="#museum">数字展馆</a>
+      <a href="#journey">实践足迹</a>
+      <a href="#team">团队成员</a>
+    </div>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <h1>如何用<em>数字</em>，<br>留住一截枯木与翠竹的<em>乡土记忆</em>？</h1>
+      <p class="sub">黑龙江八一农垦大学 · 暑期社会实践团 · 新昌非遗数字化存档项目</p>
+      <div class="hero-cards">
+        <a href="#museum" class="hero-card">探索数字展馆</a>
+        <a href="#artisan" class="hero-card">聆听匠人故事</a>
+        <a href="#journey" class="hero-card">查看实践足迹</a>
+      </div>
+    </div>
+    <div class="hero-scroll">向下滚动</div>
+  </section>
+
+  <!-- ===== Project Metadata Ticker ===== -->
+  <div class="project-metadata reveal">
+    <div class="metadata-container">
+      <div class="meta-item"><span>实地调研工时</span><strong>120+ HOURS</strong></div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><span>采集影像素材</span><strong>13 GB</strong></div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><span>数字化存档器物</span><strong>06 PIECES</strong></div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><span>非遗工艺拆解</span><strong>12 STEPS</strong></div>
+    </div>
+  </div>
+
+  <!-- ===== Artisan ===== -->
+  <section id="artisan">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Artisan &bull; Documentary</span>
+        <h2 class="section-title">匠人纪实 · 岁月的凿痕</h2>
+        <p class="section-sub">走进新昌工坊，记录老匠人指尖的体温。每一刀、每一篾，都是乡土记忆的延续。</p>
+      </div>
+      <div class="artisan-grid">
+        <div class="artisan-image reveal">
+          <img src="assets/images/artisan/img-005.jpg" alt="匠人带教现场">
+        </div>
+        <div class="artisan-text reveal">
+          <p>从剖竹到刮篾，从设计到编织，老匠人用数十年的光阴打磨一门手艺。实践团队深入新昌工坊，在竹香与木屑中记录下这些即将消逝的技艺。</p>
+          <blockquote>"一根竹，一块根，刻的是手艺，留的是乡土。"</blockquote>
+          <p>我们用镜头与文字，将这些故事从工坊带到数字世界，让更多人听见来自乡野的回响。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Digital Museum ===== -->
+  <section id="museum">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Digital Museum &bull; Archive</span>
+        <h2 class="section-title">数字展馆 · 意境重现</h2>
+        <p class="section-sub">以数字化存档留存非遗之美。点击藏品，细赏每一寸刀锋与篾丝的匠心。</p>
+      </div>
+      <div class="museum-grid">
+
+        <!-- Featured: 宝塔 -->
+        <div class="museum-card featured reveal" data-material="新昌深山毛竹" data-hours="约 150-180 小时" data-technique="细篾编筑 · 飞檐叠层">
+          <div class="img-wrap">
+            <img src="assets/images/museum/竹编馆藏1.jpg" alt="竹编宝塔" loading="lazy">
+          </div>
+          <div class="meta">
+            <span class="tag">DIGITAL ARCHIVE // 01</span>
+            <h3>竹编宝塔</h3>
+            <p>层峦叠嶂，飞檐翘角，皆由寸竹劈丝而成。</p>
+          </div>
+        </div>
+
+        <!-- 孔雀开屏 -->
+        <div class="museum-card reveal" data-material="新昌青竹 · 细篾抽丝" data-hours="约 120-160 小时" data-technique="多层编织 · 雀翎层叠">
+          <div class="img-wrap">
+            <img src="assets/images/museum/竹编馆藏2.jpg" alt="孔雀开屏" loading="lazy">
+          </div>
+          <div class="meta">
+            <span class="tag">DIGITAL ARCHIVE // 02</span>
+            <h3>孔雀开屏</h3>
+            <p>细篾如丝，层层羽翼雀翎皆具神韵。百花奖优秀创作设计二等奖。</p>
+          </div>
+        </div>
+
+        <!-- 长颈鹿 -->
+        <div class="museum-card reveal" data-material="新昌毛竹 · 立体骨架" data-hours="约 100-130 小时" data-technique="立体编织 · 仿生造型">
+          <div class="img-wrap">
+            <img src="assets/images/museum/竹编馆藏3.jpg" alt="竹编长颈鹿" loading="lazy">
+          </div>
+          <div class="meta">
+            <span class="tag">DIGITAL ARCHIVE // 03</span>
+            <h3>竹编长颈鹿</h3>
+            <p>造型灵动，编织肌理栩栩如生。</p>
+          </div>
+        </div>
+
+        <!-- 工艺流程图 -->
+        <div class="museum-card medium reveal" data-material="新昌毛竹" data-hours="全流程示范" data-technique="剖竹 → 抽丝 → 刮篾 → 编织">
+          <div class="img-wrap">
+            <img src="assets/images/museum/竹编馆藏4.jpg" alt="竹编制作流程" loading="lazy">
+          </div>
+          <div class="meta">
+            <span class="tag">DIGITAL ARCHIVE // 04</span>
+            <h3>竹编工艺 · 制作流程</h3>
+            <p>剖竹、抽丝、刮篾、编织——每一步都是时间的沉淀。</p>
+          </div>
+        </div>
+
+        <!-- 老寿星 -->
+        <div class="museum-card reveal" data-material="老樟木根" data-hours="约 80-120 小时" data-technique="立体圆雕 · 随形取意">
+          <div class="img-wrap">
+            <img src="assets/images/museum/竹编馆藏5.jpg" alt="老寿星竹雕" loading="lazy">
+          </div>
+          <div class="meta">
+            <span class="tag">DIGITAL ARCHIVE // 05</span>
+            <h3>老寿星</h3>
+            <p>根雕巧琢，慈眉善目尽显福寿之意。</p>
+          </div>
+        </div>
+
+        <!-- 江上渔翁 -->
+        <div class="museum-card reveal" data-material="老樟木根 · 场景创作" data-hours="约 130-170 小时" data-technique="散点透视 · 场景圆雕">
+          <div class="img-wrap">
+            <img src="assets/images/museum/竹编馆藏6.jpg" alt="江上渔翁" loading="lazy">
+          </div>
+          <div class="meta">
+            <span class="tag">DIGITAL ARCHIVE // 06</span>
+            <h3>江上渔翁</h3>
+            <p>场景化根雕，意境悠远如诗。</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Journey Timeline ===== -->
+  <section id="journey">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Our Journey &bull; Timeline</span>
+        <h2 class="section-title">实践足迹 · 青春下乡</h2>
+        <p class="section-sub">从校园到乡野，黑龙江八一农垦大学实践团队用脚步丈量非遗传承之路。</p>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-date">7.09 — 7.10 &nbsp;|&nbsp; 破题</div>
+          <div class="tl-title">基础框架搭建与分镜脚本</div>
+          <div class="tl-desc">确定实践方向，完成数字展馆与纪录片的前期策划与素材采集方案。</div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-date">7.11 — 7.16 &nbsp;|&nbsp; 触土</div>
+          <div class="tl-title">新昌工坊田野调查</div>
+          <div class="tl-desc">深入新昌非遗工坊，记录匠人创作过程，开展非遗文化宣讲与科普活动。</div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-date">7.17 — 7.18 &nbsp;|&nbsp; 留存</div>
+          <div class="tl-title">数字展馆落成 · 成果递交</div>
+          <div class="tl-desc">完成数字化存档，搭建线上展馆，将实践成果递交相关文化部门。</div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-date">7.19 — 至今 &nbsp;|&nbsp; 回响</div>
+          <div class="tl-title">持续传播与整理</div>
+          <div class="tl-desc">整理影像档案，持续运营数字展馆，让乡土记忆被更多人看见。</div>
+        </div>
+      </div>
+
+      <!-- Team photo banner -->
+      <div class="artisan-image reveal" style="margin-top:3rem;aspect-ratio:16/7;">
+        <img src="assets/images/journey/旗帜-留住乡土记忆实践团队-暑假-26.png" alt="实践团队合影" loading="lazy" style="object-position:center 30%;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Team ===== -->
+  <section id="team">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Our Team</span>
+        <h2 class="section-title">实践团队成员</h2>
+        <p class="section-sub">黑龙江八一农垦大学 · 留住乡土记忆实践团队</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-card reveal">
+          <div class="avatar"><img src="assets/images/team/合影.jpg" alt="团队合影" loading="lazy"></div>
+          <div class="name">实践团队</div>
+          <div class="role">全员合影</div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar"><img src="assets/images/team/纪博文-一寸照.jpg" alt="纪博文" loading="lazy"></div>
+          <div class="name">纪博文</div>
+          <div class="role">团队成员</div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar"><img src="assets/images/team/red_certificate photographing.jpg" alt="潘炜" loading="lazy"></div>
+          <div class="name">刘欣瑜</div>
+          <div class="role">团队成员</div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar"><img src="assets/images/team/宋子昂.jpg" alt="宋子昂" loading="lazy"></div>
+          <div class="name">宋子昂</div>
+          <div class="role">团队成员</div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar"><img src="assets/images/team/鞠宋松.jpg" alt="鞠宋松" loading="lazy"></div>
+          <div class="name">鞠宋松</div>
+          <div class="role">团队成员</div>
+        </div>
+        <div class="team-card reveal">
+          <div class="avatar"><img src="assets/images/team/24动医-康宁.jpg" alt="康宁" loading="lazy"></div>
+          <div class="name">康宁</div>
+          <div class="role">团队成员</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="container">
+      <div class="org">
+        <strong>共青团黑龙江八一农垦大学委员会</strong> &nbsp;·&nbsp; 动物科技学院
+      </div>
+      <div class="copyright">
+        &copy; 2026 留住乡土记忆实践团队 &nbsp;·&nbsp; 非遗数字化存档
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== Archive Modal ===== -->
+  <div id="archive-modal" class="archive-modal">
+    <div class="modal-backdrop" id="modal-close-bg"></div>
+    <div class="modal-content">
+      <button class="close-btn" id="modal-close-btn">&times;</button>
+      <div class="modal-grid">
+        <div class="modal-img-container">
+          <img id="modal-img" src="" alt="展品大图">
+        </div>
+        <div class="modal-info">
+          <span class="modal-tag" id="modal-tag"></span>
+          <h2 class="modal-title" id="modal-title"></h2>
+          <div class="modal-meta-data">
+            <p><strong>材质：</strong><span id="modal-material">新昌深山毛竹 / 老樟木根</span></p>
+            <p><strong>工时：</strong><span id="modal-hours">约 120-150 小时</span></p>
+            <p><strong>技法：</strong><span id="modal-technique">立体圆雕 / 细篾抽丝</span></p>
+          </div>
+          <p class="modal-desc" id="modal-desc"></p>
+          <div class="modal-action">
+            <button class="play-btn">&blacktriangleright; 播放工艺影像档案</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Ambient Audio Controller ===== -->
+  <div class="ambient-controller" id="ambient-btn" title="播放工坊白噪音">
+    <div class="sound-wave" id="wave-1"></div>
+    <div class="sound-wave" id="wave-2"></div>
+    <div class="sound-wave" id="wave-3"></div>
+  </div>
+  <div class="ambient-hint">点击播放在地白噪音</div>
+  <audio id="ambient-audio" loop preload="none">
+    <source src="assets/bamboo-ambient.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // ===== Hamburger =====
+    document.getElementById('hamburger').addEventListener('click', function(){
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // ===== Scroll Reveal (Intersection Observer) =====
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .tl-item').forEach(el => observer.observe(el));
+
+    // ===== Close nav on link click (mobile) =====
+    document.querySelectorAll('.links a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+      });
+    });
+
+    // ===== Archive Modal =====
+    const modal = document.getElementById('archive-modal');
+    const openModal = (card) => {
+      const imgSrc = card.querySelector('img').src;
+      const tag = card.querySelector('.tag').innerText;
+      const title = card.querySelector('h3').innerText;
+      const desc = card.querySelector('p').innerText;
+      const material = card.dataset.material || '新昌深山毛竹 / 老樟木根';
+      const hours = card.dataset.hours || '约 120-150 小时';
+      const technique = card.dataset.technique || '立体圆雕 / 细篾抽丝';
+
+      document.getElementById('modal-img').src = imgSrc;
+      document.getElementById('modal-tag').innerText = tag;
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-desc').innerText = desc;
+      document.getElementById('modal-material').innerText = material;
+      document.getElementById('modal-hours').innerText = hours;
+      document.getElementById('modal-technique').innerText = technique;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeModal = () => {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    document.querySelectorAll('.museum-card').forEach(card => {
+      card.addEventListener('click', () => openModal(card));
+    });
+    document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+    document.getElementById('modal-close-bg').addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // ===== Ambient Audio =====
+    const ambientBtn = document.getElementById('ambient-btn');
+    const ambientAudio = document.getElementById('ambient-audio');
+    let audioReady = false;
+
+    ambientBtn.addEventListener('click', () => {
+      if (!audioReady) {
+        ambientAudio.load();
+        ambientAudio.play().then(() => {
+          ambientBtn.classList.add('playing');
+          audioReady = true;
+        }).catch(() => {});
+        return;
+      }
+      if (ambientAudio.paused) {
+        ambientAudio.play();
+        ambientBtn.classList.add('playing');
+      } else {
+        ambientAudio.pause();
+        ambientBtn.classList.remove('playing');
+      }
+    });
+  </script>
+</body>
+</html>
